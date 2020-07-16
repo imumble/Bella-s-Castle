@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/BallRoom.unity
+    guid: 0af8ae8ec0a34bc4d8527d579a502aae
   m_configObjects: {}

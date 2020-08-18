@@ -4,36 +4,37 @@ using UnityEngine;
 
 public class TEST : MonoBehaviour
 {
-    [SerializeField]
-    private Rigidbody playerBody;
+    public Rigidbody theRB;
+    public float moveSpeed, jumpForce;
 
-    private Vector3 inputVector;
+    private Vector2 moveInput;
 
-    private bool isGrounded;
-    public Transform groundCheck;
-    public float groundDistance = 0.4f;
-    public LayerMask groundMask;
+    public LayerMask whatIsGround;
+    public Transform groupPoint;
+    private bool isGround;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        playerBody = GetComponent<Rigidbody>();
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        inputVector = new Vector3(Input.GetAxis("Horizontal") * 7f, playerBody.velocity.y, Input.GetAxis("Vertical") * 7f);
+        moveInput.x = Input.GetAxis("Horizontal");
+        moveInput.y = Input.GetAxis("Vertical");
+        moveInput.Normalize();
 
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        theRB.velocity = new Vector3(moveInput.x * moveSpeed, theRB.velocity.y, moveInput.y * moveSpeed);
+
+
+        RaycastHit hit;
+        if(Physics.Raycast(groupPoint.position, Vector3.down, out hit, .3f, whatIsGround))
         {
-            playerBody.AddForce(0, 10f, 0, ForceMode.Impulse);
+            isGround = true;
         }
-    }
+        else
+        {
+            isGround = false;
+        }
 
-    private void FixedUpdate()
-    {
-        playerBody.velocity = inputVector;
+        if(Input.GetButtonDown("Jump") && isGround)
+        {
+            theRB.velocity += new Vector3(0f, jumpForce, 0f);
+        }
     }
 }

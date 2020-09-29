@@ -15,13 +15,20 @@ public class BattleSystem : MonoBehaviour
     public Transform warriorBattleStation;
     public Transform mageBattleStation;
     public Transform enemyBattleStation;
+    public Transform enemy2BattleStation;
+    public Transform enemy3BattleStation;
 
     public PlayerHUD PlayerHUD;
     public EnemyHUD EnemyHUD;
 
+    public bool secondEnemy;
+    public bool thirdEnemy;
+
     Unit warriorUnit;
     Unit mageUnit;
     EnemyUnit enemyUnit;
+    EnemyUnit enemy2Unit;
+    EnemyUnit enemy3Unit;
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +42,10 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator SetupBattle()
     {
+        //for testing
+        secondEnemy = true;
+        thirdEnemy = true;
+
         Debug.Log("SetupBattle");
         GameObject warriorGO = Instantiate(warriorPrefab, warriorBattleStation);
         warriorUnit = warriorGO.GetComponent<Unit>();
@@ -44,6 +55,18 @@ public class BattleSystem : MonoBehaviour
 
         GameObject enemyGO = Instantiate(enemyPrefab, enemyBattleStation);
         enemyUnit = enemyGO.GetComponent<EnemyUnit>();
+
+        if (secondEnemy)
+        {
+            GameObject enemy2GO = Instantiate(enemyPrefab, enemy2BattleStation);
+            enemy2Unit = enemy2GO.GetComponent<EnemyUnit>();
+        }
+
+        if (thirdEnemy)
+        {
+            GameObject enemy3GO = Instantiate(enemyPrefab, enemy3BattleStation);
+            enemy3Unit = enemy3GO.GetComponent<EnemyUnit>();
+        }
 
         PlayerHUD.SetHUD(warriorUnit, mageUnit);
         EnemyHUD.SetEnemyHUD(enemyUnit);
@@ -70,12 +93,23 @@ public class BattleSystem : MonoBehaviour
         Debug.Log("Enemys are attacking!... not implemented yet");
     }
 
+    void BattleWon()
+    {
+        Debug.Log("YOU WON!");
+    }
+
+    void BattleLost()
+    {
+        Debug.Log("YOU LOST! GAME OVER!");
+    }
+
     public void OnAttackButton()
     {
         switch (state) 
         {
             case BattleState.PLAYERTURN:
                 Debug.Log("Player 1 Attacking!");
+                //Choose enemy
                 StartCoroutine(PlayerAttack());
                 break;
             case BattleState.PLAYER2TURN:

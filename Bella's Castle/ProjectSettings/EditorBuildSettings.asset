@@ -6,12 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/BallRoom.unity
-    guid: 0af8ae8ec0a34bc4d8527d579a502aae
+    path: Assets/Easy Character Movement/Examples/Scenes/Simple Demo.unity
+    guid: 3c937bf463563f34590c841436549683
   - enabled: 1
-    path: Assets/Scenes/OutsideCastle.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
-    path: Assets/Scenes/StartingRoom.unity
-    guid: 1396904d995f9204a9faaaa3d4b7d806
+    path: Assets/Scenes/BattleRoom.unity.unity
+    guid: fb7abf368532bf349b6f59ae8eb4c357
   m_configObjects: {}

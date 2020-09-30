@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TreeEditor;
 using UnityEngine;
 
 public enum BattleState { START, PLAYERTURN, PLAYER2TURN, ENEMYSTURN, WON, LOST }
@@ -39,6 +40,7 @@ public class BattleSystem : MonoBehaviour
 
         StartCoroutine(SetupBattle());
     }
+
 
     IEnumerator SetupBattle()
     {
@@ -105,6 +107,9 @@ public class BattleSystem : MonoBehaviour
 
     public void OnAttackButton()
     {
+        //Choose enemy to attack
+
+
         switch (state) 
         {
             case BattleState.PLAYERTURN:
@@ -145,7 +150,6 @@ public class BattleSystem : MonoBehaviour
     {
         //Damage the enemy
         yield return new WaitForSeconds(2f);
-
         bool isDead = enemyUnit.TakeDamage(warriorUnit.attack);
         EnemyHUD.SetEnemyHUD(enemyUnit);
 

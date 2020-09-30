@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Easy Character Movement/Examples/Scenes/Simple Demo.unity
+- path: Assets/Scenes/BattleRoom.unity.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0

@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Easy Character Movement/Examples/Scenes/Simple Demo.unity
+    path: Assets/Scenes/Simple Demo.unity
     guid: 3c937bf463563f34590c841436549683
   - enabled: 1
     path: Assets/Scenes/BattleRoom.unity.unity

@@ -7,6 +7,7 @@ public enum BattleState { START, PLAYERTURN, PLAYER2TURN, ENEMYSTURN, WON, LOST 
 
 public class BattleSystem : MonoBehaviour
 {
+    public EnemySelect enemySelect;
     public BattleState state;
 
     public GameObject warriorPrefab;
@@ -107,15 +108,14 @@ public class BattleSystem : MonoBehaviour
 
     public void OnAttackButton()
     {
-        //Choose enemy to attack
-
 
         switch (state) 
         {
             case BattleState.PLAYERTURN:
                 Debug.Log("Player 1 Attacking!");
                 //Choose enemy
-                StartCoroutine(PlayerAttack());
+                //StartCoroutine(PlayerAttack());
+                enemySelect.ShowEnemySelectPanel();
                 break;
             case BattleState.PLAYER2TURN:
                 Debug.Log("Player 2 Attacking!");
@@ -146,7 +146,7 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    IEnumerator PlayerAttack()
+    public IEnumerator PlayerAttack()
     {
         //Damage the enemy
         yield return new WaitForSeconds(2f);

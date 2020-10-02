@@ -13,6 +13,8 @@ public class BattleSystem : MonoBehaviour
     public GameObject warriorPrefab;
     public GameObject magePrefab;
     public GameObject enemyPrefab;
+    public GameObject enemy2Prefab;
+    public GameObject enemy3Prefab;
 
     public Transform warriorBattleStation;
     public Transform mageBattleStation;
@@ -28,9 +30,9 @@ public class BattleSystem : MonoBehaviour
 
     Unit warriorUnit;
     Unit mageUnit;
-    EnemyUnit enemyUnit;
-    EnemyUnit enemy2Unit;
-    EnemyUnit enemy3Unit;
+    public EnemyUnit enemyUnit;
+    public EnemyUnit enemy2Unit;
+    public EnemyUnit enemy3Unit;
 
     // Start is called before the first frame update
     void Start()
@@ -61,13 +63,13 @@ public class BattleSystem : MonoBehaviour
 
         if (secondEnemy)
         {
-            GameObject enemy2GO = Instantiate(enemyPrefab, enemy2BattleStation);
+            GameObject enemy2GO = Instantiate(enemy2Prefab, enemy2BattleStation);
             enemy2Unit = enemy2GO.GetComponent<EnemyUnit>();
         }
 
         if (thirdEnemy)
         {
-            GameObject enemy3GO = Instantiate(enemyPrefab, enemy3BattleStation);
+            GameObject enemy3GO = Instantiate(enemy3Prefab, enemy3BattleStation);
             enemy3Unit = enemy3GO.GetComponent<EnemyUnit>();
         }
 
@@ -93,7 +95,9 @@ public class BattleSystem : MonoBehaviour
 
     void EnemysTurn()
     {
-        Debug.Log("Enemys are attacking!... not implemented yet");
+        Debug.Log("Enemy Does nothing! Players Turn!");
+        state = BattleState.PLAYERTURN;
+        PlayerTurn();
     }
 
     void BattleWon()
@@ -108,18 +112,16 @@ public class BattleSystem : MonoBehaviour
 
     public void OnAttackButton()
     {
-
         switch (state) 
         {
             case BattleState.PLAYERTURN:
                 Debug.Log("Player 1 Attacking!");
                 //Choose enemy
-                //StartCoroutine(PlayerAttack());
                 enemySelect.ShowEnemySelectPanel();
                 break;
             case BattleState.PLAYER2TURN:
                 Debug.Log("Player 2 Attacking!");
-                StartCoroutine(PlayerAttack());
+                enemySelect.ShowEnemySelectPanel();
                 break;
             default:
                 Debug.Log("Its not your turn");
@@ -146,12 +148,27 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    public IEnumerator PlayerAttack()
+    public IEnumerator PlayerAttack(int enemySlot)
     {
         //Damage the enemy
         yield return new WaitForSeconds(2f);
-        bool isDead = enemyUnit.TakeDamage(warriorUnit.attack);
-        EnemyHUD.SetEnemyHUD(enemyUnit);
+        bool isDead = false;
+
+        switch (enemySlot)
+        {
+            case 1:
+                isDead = enemyUnit.TakeDamage(warriorUnit.attack);
+                EnemyHUD.SetEnemyHUD(enemyUnit);
+                break;
+            case 2:
+                isDead = enemy2Unit.TakeDamage(warriorUnit.attack);
+                EnemyHUD.SetEnemyHUD(enemy2Unit);
+                break;
+            case 3:
+                isDead = enemy3Unit.TakeDamage(warriorUnit.attack);
+                EnemyHUD.SetEnemyHUD(enemy3Unit);
+                break;
+        }
 
         //check if the enemy is dead
         if (isDead)

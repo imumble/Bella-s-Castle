@@ -1,9 +1,5 @@
 sceneSetups:
-<<<<<<< HEAD
-- path: Assets/Scenes/BattleRoom.unity.unity
-=======
 - path: Assets/Scenes/Real game.unity
->>>>>>> master
   isLoaded: 1
   isActive: 1
   isSubScene: 0

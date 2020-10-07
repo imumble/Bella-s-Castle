@@ -5,8 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class OverWorldTest : MonoBehaviour
 {
+    public Collider battleStarter;
     private void OnTriggerEnter(Collider collider)
     {
-        SceneManager.LoadScene(1);
+        Debug.Log("BattleStart!");
+        //SceneManager.LoadScene(0);
     }
 }

@@ -9,6 +9,8 @@ public class CompanionFollow : MonoBehaviour
     public float allowedDistance = 6;
     public GameObject follower;
     public float followSpeed;
+    public Rigidbody theRB;
+    public Animator anim;
 
     void Update()
     {
@@ -24,5 +26,6 @@ public class CompanionFollow : MonoBehaviour
             followSpeed = 0f;
             //maybe tell her to idle animate?
         }
+        anim.SetFloat("followSpeed", theRB.velocity.magnitude);
     }
 }

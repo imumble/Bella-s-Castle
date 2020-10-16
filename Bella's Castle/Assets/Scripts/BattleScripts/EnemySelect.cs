@@ -80,17 +80,28 @@ public class EnemySelect : MonoBehaviour
 
     public void AttackSlot1()
     {
-        StartCoroutine(battleSystem.PlayerAttack(1));
-        enemySelectPanel.SetActive(false);
+        AttackBadGuy(1);
     }
     public void AttackSlot2()
     {
-        StartCoroutine(battleSystem.PlayerAttack(2));
-        enemySelectPanel.SetActive(false);
+        AttackBadGuy(2);
     }
     public void AttackSlot3()
     {
-        StartCoroutine(battleSystem.PlayerAttack(3));
+        AttackBadGuy(3);
+    }
+
+    public void AttackBadGuy(int slot)
+    {
+        if (battleSystem.regularAttack)
+        {
+            StartCoroutine(battleSystem.PlayerAttack(slot));
+        }
+        else
+        {
+            StartCoroutine(battleSystem.PlayerTimedAttack(slot));
+        }
+        
         enemySelectPanel.SetActive(false);
     }
 }

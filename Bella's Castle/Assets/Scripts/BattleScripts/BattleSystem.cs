@@ -8,6 +8,8 @@ public enum BattleState { START, PLAYERTURN, PLAYER2TURN, ENEMYSTURN, WON, LOST 
 public class BattleSystem : MonoBehaviour
 {
     public EnemySelect enemySelect;
+    public TimedAttack timedAttack;
+
     public BattleState state;
 
     public GameObject warriorPrefab;
@@ -33,6 +35,8 @@ public class BattleSystem : MonoBehaviour
     public EnemyUnit enemyUnit;
     public EnemyUnit enemy2Unit;
     public EnemyUnit enemy3Unit;
+
+    public bool regularAttack;
 
     // Start is called before the first frame update
     void Start()
@@ -112,7 +116,28 @@ public class BattleSystem : MonoBehaviour
 
     public void OnAttackButton()
     {
+        regularAttack = true;
         switch (state) 
+        {
+            case BattleState.PLAYERTURN:
+                Debug.Log("Player 1 Attacking!");
+                //Choose enemy
+                enemySelect.ShowEnemySelectPanel();
+                break;
+            case BattleState.PLAYER2TURN:
+                Debug.Log("Player 2 Attacking!");
+                enemySelect.ShowEnemySelectPanel();
+                break;
+            default:
+                Debug.Log("Its not your turn");
+                return;//return nothing
+        }
+    }
+
+    public void OnMagicButton()
+    {
+        regularAttack = false;
+        switch (state)
         {
             case BattleState.PLAYERTURN:
                 Debug.Log("Player 1 Attacking!");
@@ -169,6 +194,68 @@ public class BattleSystem : MonoBehaviour
                 EnemyHUD.SetEnemyHUD(enemy3Unit);
                 break;
         }
+
+        //check if the enemy is dead
+        if (isDead)
+        {
+            //If all the enemys are dead we can end it here
+            Debug.Log("You WON!");
+            state = BattleState.WON;
+        }
+        else
+        {
+            switch (state)
+            {
+                case BattleState.PLAYERTURN:
+                    Debug.Log("Players Turn. Choose an action");
+                    state = BattleState.PLAYER2TURN;
+                    Player2Turn();
+                    break;
+                case BattleState.PLAYER2TURN:
+                    Debug.Log("Player2s Turn. Choose an action");
+                    state = BattleState.ENEMYSTURN;
+                    EnemysTurn();
+                    break;
+                default:
+                    Debug.Log("Its not your turn");
+                    break;
+            }
+        }
+    }
+
+    public IEnumerator PlayerTimedAttack(int enemySlot)
+    {
+        timedAttack.timedAttackBarGO.SetActive(true);
+        //Damage the enemy
+        yield return new WaitForSeconds(2f);
+        bool isDead = false;
+
+        timedAttack.currentPowerBarValue = 0;
+        timedAttack.PowerBarON = true;
+        StartCoroutine(timedAttack.UpdatePowerBar());
+        yield return new WaitForSeconds(3f);
+        timedAttack.timedAttackBarGO.SetActive(false);
+
+        if (timedAttack.PowerBarMask.fillAmount >= 0.45 && timedAttack.PowerBarMask.fillAmount <= 0.55)
+        {
+            switch (enemySlot)
+            {
+                case 1:
+                    isDead = enemyUnit.TakeDamage(warriorUnit.attack * 2);
+                    EnemyHUD.SetEnemyHUD(enemyUnit);
+                    break;
+                case 2:
+                    isDead = enemy2Unit.TakeDamage(warriorUnit.attack * 2);
+                    EnemyHUD.SetEnemyHUD(enemy2Unit);
+                    break;
+                case 3:
+                    isDead = enemy3Unit.TakeDamage(warriorUnit.attack * 2);
+                    EnemyHUD.SetEnemyHUD(enemy3Unit);
+                    break;
+            }
+        }
+        Debug.Log(timedAttack.PowerBarMask.fillAmount);
+        
 
         //check if the enemy is dead
         if (isDead)

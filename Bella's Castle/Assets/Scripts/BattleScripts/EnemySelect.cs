@@ -22,6 +22,7 @@ public class EnemySelect : MonoBehaviour
 
     public void ShowEnemySelectPanel()
     {
+        //Decide how many enemys to show in the panel
         if(battleSystem.enemyUnit != null)
         {
             enemyNameSlot1.text = battleSystem.enemyUnit.unitName;

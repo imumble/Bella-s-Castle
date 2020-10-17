@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Ludiq;
+using System.Collections;
 using System.Collections.Generic;
 using TreeEditor;
 using UnityEngine;
@@ -38,12 +39,15 @@ public class BattleSystem : MonoBehaviour
 
     public bool regularAttack;
 
+    private GameObject warriorGO;
+    private GameObject mageGO;
+    private GameObject enemyGO;
+    private GameObject enemy2GO;
+    private GameObject enemy3GO;
     // Start is called before the first frame update
     void Start()
     {
         state = BattleState.START;
-
-        //Overworld attack takes place
 
         StartCoroutine(SetupBattle());
     }
@@ -56,29 +60,31 @@ public class BattleSystem : MonoBehaviour
         thirdEnemy = true;
 
         Debug.Log("SetupBattle");
-        GameObject warriorGO = Instantiate(warriorPrefab, warriorBattleStation);
+        warriorGO = Instantiate(warriorPrefab, warriorBattleStation);
         warriorUnit = warriorGO.GetComponent<Unit>();
 
-        GameObject mageGO = Instantiate(magePrefab, mageBattleStation);
+        mageGO = Instantiate(magePrefab, mageBattleStation);
         mageUnit = mageGO.GetComponent<Unit>();
 
-        GameObject enemyGO = Instantiate(enemyPrefab, enemyBattleStation);
+        enemyGO = Instantiate(enemyPrefab, enemyBattleStation);
         enemyUnit = enemyGO.GetComponent<EnemyUnit>();
 
         if (secondEnemy)
         {
-            GameObject enemy2GO = Instantiate(enemy2Prefab, enemy2BattleStation);
+            enemy2GO = Instantiate(enemy2Prefab, enemy2BattleStation);
             enemy2Unit = enemy2GO.GetComponent<EnemyUnit>();
         }
 
         if (thirdEnemy)
         {
-            GameObject enemy3GO = Instantiate(enemy3Prefab, enemy3BattleStation);
+            enemy3GO = Instantiate(enemy3Prefab, enemy3BattleStation);
             enemy3Unit = enemy3GO.GetComponent<EnemyUnit>();
         }
 
         PlayerHUD.SetHUD(warriorUnit, mageUnit);
         EnemyHUD.SetEnemyHUD(enemyUnit);
+
+        //Overworld attack takes place
 
         //Battle is set up so now its the players turn
 
@@ -198,11 +204,32 @@ public class BattleSystem : MonoBehaviour
         //check if the enemy is dead
         if (isDead)
         {
-            //If all the enemys are dead we can end it here
-            Debug.Log("You WON!");
-            state = BattleState.WON;
+            //Destroy the enemy gameobject, and null the unit
+            switch (enemySlot)
+            {
+                case 1:
+                    Destroy(enemyGO);
+                    enemyUnit = null;
+                    break;
+                case 2:
+                    Destroy(enemy2GO);
+                    enemy2Unit = null;
+                    break;
+                case 3:
+                    Destroy(enemy3GO);
+                    enemy3Unit = null;
+                    break;
+            }
+
+            //check if there are any more bad guys
+            if (enemyUnit == null && enemy2Unit == null && enemy3Unit == null)
+            {
+                //If all the enemys are dead we can end it here
+                Debug.Log("You WON!");
+                state = BattleState.WON;
+            }
         }
-        else
+        else //the fight goes on
         {
             switch (state)
             {
@@ -225,12 +252,14 @@ public class BattleSystem : MonoBehaviour
 
     public IEnumerator PlayerTimedAttack(int enemySlot)
     {
-        timedAttack.timedAttackBarGO.SetActive(true);
-        //Damage the enemy
-        yield return new WaitForSeconds(2f);
         bool isDead = false;
 
+        //Reset the timed attack bar
         timedAttack.currentPowerBarValue = 0;
+        //show the timed attack bar
+        timedAttack.timedAttackBarGO.SetActive(true);
+        yield return new WaitForSeconds(1f);
+
         timedAttack.PowerBarON = true;
         StartCoroutine(timedAttack.UpdatePowerBar());
         yield return new WaitForSeconds(3f);
@@ -256,15 +285,35 @@ public class BattleSystem : MonoBehaviour
         }
         Debug.Log(timedAttack.PowerBarMask.fillAmount);
         
-
         //check if the enemy is dead
         if (isDead)
         {
-            //If all the enemys are dead we can end it here
-            Debug.Log("You WON!");
-            state = BattleState.WON;
+            //Destroy the enemy gameobject, and null the unit
+            switch (enemySlot)
+            {
+                case 1:
+                    Destroy(enemyGO);
+                    enemyUnit = null;
+                    break;
+                case 2:
+                    Destroy(enemy2GO);
+                    enemy2Unit = null;
+                    break;
+                case 3:
+                    Destroy(enemy3GO);
+                    enemy3Unit = null;
+                    break;
+            }
+
+            //check if there are any more bad guys
+            if (enemyUnit == null && enemy2Unit == null && enemy3Unit == null)
+            {
+                //If all the enemys are dead we can end it here
+                Debug.Log("You WON!");
+                state = BattleState.WON;
+            }
         }
-        else
+        else //the fight goes on
         {
             switch (state)
             {

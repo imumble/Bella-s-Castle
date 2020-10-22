@@ -106,6 +106,7 @@ public class BattleSystem : MonoBehaviour
     void EnemysTurn()
     {
         Debug.Log("Enemy Does nothing! Players Turn!");
+        
         state = BattleState.PLAYERTURN;
         PlayerTurn();
     }

@@ -23,7 +23,18 @@ public class EnemySelect : MonoBehaviour
     public void ShowEnemySelectPanel()
     {
         //Decide how many enemys to show in the panel
-        if(battleSystem.enemyUnit != null)
+        firstPanel();
+
+        secondPanel();
+
+        thirdPanel();
+
+        enemySelectPanel.SetActive(true);
+    }
+
+    private void firstPanel()
+    {
+        if (battleSystem.enemyUnit != null)
         {
             enemyNameSlot1.text = battleSystem.enemyUnit.unitName;
             enemyHPSlot1.text = battleSystem.enemyUnit.currentHP + "/" + battleSystem.enemyUnit.maxHP;
@@ -32,10 +43,15 @@ public class EnemySelect : MonoBehaviour
         {
             enemySlot1Panel.SetActive(false);
         }
+    }
 
-        if(battleSystem.enemy2Unit != null)
+    private void secondPanel()
+    {
+        //Is there a second enemy
+        if (battleSystem.enemy2Unit != null)
         {
-            if (battleSystem.enemyUnit.unitName == battleSystem.enemy2Unit.unitName)
+            //are we the same unit as the first slot?
+            if (battleSystem.enemyUnit != null && battleSystem.enemyUnit.unitName == battleSystem.enemy2Unit.unitName)
             {
                 enemyNameSlot2.text = battleSystem.enemy2Unit.unitName + "2";
             }
@@ -43,21 +59,26 @@ public class EnemySelect : MonoBehaviour
             {
                 enemyNameSlot2.text = battleSystem.enemy2Unit.unitName;
             }
-            enemyHPSlot2.text = battleSystem.enemy2Unit.currentHP + "/" + battleSystem.enemyUnit.maxHP;
+            enemyHPSlot2.text = battleSystem.enemy2Unit.currentHP + "/" + battleSystem.enemy2Unit.maxHP;
         }
         else
         {
             enemySlot2Panel.SetActive(false);
         }
+    }
 
-        if(battleSystem.enemy3Unit != null)
+    private void thirdPanel()
+    {
+        //is there third enemy
+        if (battleSystem.enemy3Unit != null)
         {
-            if (battleSystem.enemyUnit.unitName == battleSystem.enemy3Unit.unitName)
+
+            if (battleSystem.enemyUnit != null && battleSystem.enemyUnit.unitName == battleSystem.enemy3Unit.unitName)
             {
                 enemyNameSlot3.text = battleSystem.enemy3Unit.unitName + "2";
             }
 
-            if (battleSystem.enemy2Unit != null)
+            if (battleSystem.enemyUnit != null && battleSystem.enemy2Unit != null)
             {
                 if (battleSystem.enemy2Unit.unitName == battleSystem.enemy3Unit.unitName)
                 {
@@ -68,15 +89,12 @@ public class EnemySelect : MonoBehaviour
                     enemyNameSlot3.text = battleSystem.enemy3Unit.unitName;
                 }
             }
-
-            enemyHPSlot3.text = battleSystem.enemy3Unit.currentHP + "/" + battleSystem.enemyUnit.maxHP;
+            enemyHPSlot3.text = battleSystem.enemy3Unit.currentHP + "/" + battleSystem.enemy3Unit.maxHP;
         }
         else
         {
             enemySlot3Panel.SetActive(false);
         }
-
-        enemySelectPanel.SetActive(true);
     }
 
     public void AttackSlot1()

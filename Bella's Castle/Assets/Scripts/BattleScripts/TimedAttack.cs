@@ -20,6 +20,7 @@ public class TimedAttack : MonoBehaviour
             if (Input.GetKeyDown("space"))
             {
                 PowerBarON = false;
+                break;
             }
             currentPowerBarValue += barChangeSpeed;
 

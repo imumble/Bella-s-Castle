@@ -264,6 +264,7 @@ public class BattleSystem : MonoBehaviour
         timedAttack.PowerBarON = true;
         StartCoroutine(timedAttack.UpdatePowerBar());
         yield return new WaitForSeconds(3f);
+        timedAttack.PowerBarON = false;
         timedAttack.timedAttackBarGO.SetActive(false);
 
         if (timedAttack.PowerBarMask.fillAmount >= 0.45 && timedAttack.PowerBarMask.fillAmount <= 0.55)

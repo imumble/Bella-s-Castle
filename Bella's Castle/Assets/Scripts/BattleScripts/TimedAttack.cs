@@ -13,15 +13,18 @@ public class TimedAttack : MonoBehaviour
     public float currentPowerBarValue;
     public bool PowerBarON;
 
+    public void Update()
+    {
+        if (Input.GetKeyDown("space"))
+        {
+            PowerBarON = false;
+        }
+    }
+
     public IEnumerator UpdatePowerBar()
     {
         while (PowerBarON)
         {
-            if (Input.GetKeyDown("space"))
-            {
-                PowerBarON = false;
-                break;
-            }
             currentPowerBarValue += barChangeSpeed;
 
             float fill = currentPowerBarValue / maxPowerBarValue;

@@ -9,8 +9,12 @@ public class OverWorldTest : MonoBehaviour
     public Collider chasser;
     private void OnTriggerEnter(Collider collider)
     {
-        Debug.Log("BattleStart!");
-        //SceneManager.LoadScene(0);
+        Debug.Log(collider.name);
+        //Check to make sure collided with player
+        if (collider.name == "Main Character 1")
+        {
+            Debug.Log("BattleStart!");
+            SceneManager.LoadScene(0);
+        }
     }
-
 }

@@ -1,8 +1,6 @@
-﻿using Ludiq;
-using System.Collections;
-using System.Collections.Generic;
-using TreeEditor;
+﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum BattleState { START, PLAYERTURN, PLAYER2TURN, ENEMYSTURN, WON, LOST }
 
@@ -52,6 +50,10 @@ public class BattleSystem : MonoBehaviour
         StartCoroutine(SetupBattle());
     }
 
+    private void Update()
+    {
+        PlayerHUD.Player1Health.text = MainPlayer.playerCurrentHealth + "/" + MainPlayer.playerMaxHealth;
+    }
 
     IEnumerator SetupBattle()
     {
@@ -105,15 +107,52 @@ public class BattleSystem : MonoBehaviour
 
     void EnemysTurn()
     {
-        Debug.Log("Enemy Does nothing! Players Turn!");
-        
+        Debug.Log("Enemys Attack!");
+
+        firstEnemyAttack();
+
+        secondEnemyAttack();
+
+        thirdEnemyAttack();
+
         state = BattleState.PLAYERTURN;
         PlayerTurn();
+    }
+
+    private void firstEnemyAttack()
+    {
+        //Is there a first enemy
+        if (enemyUnit != null)
+        {
+            MainPlayer.playerCurrentHealth = MainPlayer.playerCurrentHealth - enemyUnit.attack;
+            Debug.Log("MainplayerCurrentHealth" + MainPlayer.playerCurrentHealth);
+        }
+    }
+
+    private void secondEnemyAttack()
+    {
+        //Is there a second enemy
+        if (enemy2Unit != null)
+        {
+            MainPlayer.playerCurrentHealth = MainPlayer.playerCurrentHealth - enemy2Unit.attack;
+            Debug.Log("MainplayerCurrentHealth" + MainPlayer.playerCurrentHealth);
+        }
+    }
+
+    private void thirdEnemyAttack()
+    {
+        //is there third enemy
+        if (enemy3Unit != null)
+        {
+            MainPlayer.playerCurrentHealth = MainPlayer.playerCurrentHealth - enemy3Unit.attack;
+            Debug.Log("MainplayerCurrentHealth" + MainPlayer.playerCurrentHealth);
+        }
     }
 
     void BattleWon()
     {
         Debug.Log("YOU WON!");
+        SceneManager.LoadScene(2);
     }
 
     void BattleLost()
@@ -189,15 +228,15 @@ public class BattleSystem : MonoBehaviour
         switch (enemySlot)
         {
             case 1:
-                isDead = enemyUnit.TakeDamage(warriorUnit.attack);
+                isDead = enemyUnit.TakeDamage(MainPlayer.playerATK);
                 EnemyHUD.SetEnemyHUD(enemyUnit);
                 break;
             case 2:
-                isDead = enemy2Unit.TakeDamage(warriorUnit.attack);
+                isDead = enemy2Unit.TakeDamage(MainPlayer.playerATK);
                 EnemyHUD.SetEnemyHUD(enemy2Unit);
                 break;
             case 3:
-                isDead = enemy3Unit.TakeDamage(warriorUnit.attack);
+                isDead = enemy3Unit.TakeDamage(MainPlayer.playerATK);
                 EnemyHUD.SetEnemyHUD(enemy3Unit);
                 break;
         }
@@ -226,8 +265,7 @@ public class BattleSystem : MonoBehaviour
             if (enemyUnit == null && enemy2Unit == null && enemy3Unit == null)
             {
                 //If all the enemys are dead we can end it here
-                Debug.Log("You WON!");
-                state = BattleState.WON;
+                BattleWon();
             }
         }
         else //the fight goes on
@@ -272,15 +310,15 @@ public class BattleSystem : MonoBehaviour
             switch (enemySlot)
             {
                 case 1:
-                    isDead = enemyUnit.TakeDamage(warriorUnit.attack * 2);
+                    isDead = enemyUnit.TakeDamage(MainPlayer.playerATK * 2);
                     EnemyHUD.SetEnemyHUD(enemyUnit);
                     break;
                 case 2:
-                    isDead = enemy2Unit.TakeDamage(warriorUnit.attack * 2);
+                    isDead = enemy2Unit.TakeDamage(MainPlayer.playerATK * 2);
                     EnemyHUD.SetEnemyHUD(enemy2Unit);
                     break;
                 case 3:
-                    isDead = enemy3Unit.TakeDamage(warriorUnit.attack * 2);
+                    isDead = enemy3Unit.TakeDamage(MainPlayer.playerATK * 2);
                     EnemyHUD.SetEnemyHUD(enemy3Unit);
                     break;
             }
@@ -311,8 +349,7 @@ public class BattleSystem : MonoBehaviour
             if (enemyUnit == null && enemy2Unit == null && enemy3Unit == null)
             {
                 //If all the enemys are dead we can end it here
-                Debug.Log("You WON!");
-                state = BattleState.WON;
+                BattleWon();
             }
         }
         else //the fight goes on
